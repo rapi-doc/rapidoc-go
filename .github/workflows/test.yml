@@ -1,0 +1,38 @@
+name: Test
+
+# Runs the conformance fixtures of the RapiDoc integration contract and the handler tests.
+# A release is a git tag (vX.Y.Z); there is nothing to publish.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        # the oldest Go the module supports (go.mod) and the current one
+        go-version: ['1.22', 'stable']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Formatting
+        run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+
+      - run: go vet ./...
+
+      - run: go test ./...

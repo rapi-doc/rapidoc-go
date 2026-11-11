@@ -1,0 +1,43 @@
+{
+  "contract": 1,
+  "name": "rapidoc",
+  "version": "12.2.1",
+  "elements": [
+    "rapi-doc",
+    "rapi-doc-mini",
+    "oauth-receiver"
+  ],
+  "cdn": "https://cdn.jsdelivr.net/npm/rapidoc@12.2.1/dist/",
+  "files": {
+    "rapidoc-min.js": {
+      "role": "script",
+      "contentType": "text/javascript; charset=utf-8",
+      "bytes": 643134,
+      "integrity": "sha384-fDL68sPBr9TyucAsgfEt3RC8GRwnn2/BBD6yMhTlMXjrpYwO1izQ4eYuYxtx3hkN"
+    },
+    "rapidoc-min.js.LICENSE.txt": {
+      "role": "license",
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 19073,
+      "integrity": "sha384-yJi7Sdq1zZ4poh3CEcMLVui9lWzMqSXRuy9ZoJkF6x+Y8tkMZQNz7KGC+1OWNziX"
+    },
+    "oauth-receiver.html": {
+      "role": "oauth-receiver",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 236,
+      "integrity": "sha384-rfos5ZPmmjObE/xd+YkxUxo2Pj7jgdyLD4FaC9OiacqFZIh53ENId1EYcXyOCcLW"
+    },
+    "rapidoc-flow-min.js": {
+      "role": "flow-script",
+      "contentType": "text/javascript; charset=utf-8",
+      "bytes": 213829,
+      "integrity": "sha384-LPIOQCz5cmcr/crNRO+r8GAkACSZq+kDFt39+PVYMeB803+CFUiq0V7FETy8M6qB"
+    },
+    "rapidoc-flow-min.js.LICENSE.txt": {
+      "role": "flow-license",
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 8286,
+      "integrity": "sha384-cPZoQqVV7R6RJUj/xHLmY3mc1AZlX3sZMSY9cPAEZXtaG5jkWVYISUYu7RItmJtR"
+    }
+  }
+}
