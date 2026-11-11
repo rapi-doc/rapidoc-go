@@ -28,7 +28,37 @@ func main() {
 
 Open `/docs`. Nothing is loaded from another site: the package carries the RapiDoc bundle, pinned to one release.
 
-It is a plain `net/http` handler with no dependencies, so it works wherever one does. It does not generate the OpenAPI document; point it at the one your app already has, from Huma, swaggo, ogen, oapi-codegen or a file you wrote.
+It is a plain `net/http` handler with no dependencies, so it works wherever one does.
+
+## Where the OpenAPI document comes from
+
+`/openapi.json` in the example is a URL of your own app. Go has no built-in OpenAPI support, and this package shows a document; it does not create one. There are three usual sources:
+
+**A framework that generates it from your code.** [Huma](https://huma.rocks) builds the document from your typed handlers and serves it at `/openapi.json`; [Fuego](https://github.com/go-fuego/fuego) works the same way. Point `SpecURL` at the framework's document ([Huma example](#huma) below).
+
+**A tool that generates it from comments.** [swaggo/swag](https://github.com/swaggo/swag) writes `docs/swagger.json` from comments above your handlers when you run `swag init`. Serve or embed that file as in the next case; RapiDoc reads Swagger 2.0 as well as OpenAPI 3.
+
+**A file you write** (spec-first), often the input of a code generator such as [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) or [ogen](https://github.com/ogen-go/ogen). Embed a JSON file and hand it over; it is written into the page, so no URL is needed:
+
+```go
+//go:embed openapi.json
+var spec []byte
+
+docs := rapidoc.Handler(rapidoc.Options{Spec: spec})
+```
+
+`Spec` takes JSON. For a YAML file, serve it and use `SpecURL`; RapiDoc reads YAML in the browser:
+
+```go
+//go:embed openapi.yaml
+var spec []byte
+
+mux.HandleFunc("GET /openapi.yaml", func(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/yaml")
+	w.Write(spec)
+})
+docs := rapidoc.Handler(rapidoc.Options{SpecURL: "/openapi.yaml"})
+```
 
 ## Options
 
