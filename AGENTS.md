@@ -11,7 +11,7 @@ RapiDoc for Go: `rapidoc.Handler(options)` is a `net/http` handler that serves t
 | File | Role |
 | :--- | :--- |
 | `contract.go` | The contract in Go: a port of `src/core.js` of `@rapidoc/embed`, same function for function. No `net/http` |
-| `rapidoc.go` | The public API: `Options`, `Assets`, `Handler`, `NewHandler`, `Middleware`, `Version`; the embedded files |
+| `rapidoc.go` | The public API: `Options` (and `Options.Validate`), `Handler`, `Middleware`, `Assets` (`Bundled`, `CDN`, `ScriptURL`), `BundleVersion`; the embedded files |
 | `assets/` | One rapidoc release: `rapidoc-min.js`, its license file, `integration.json`. Committed; embedded with `go:embed` |
 | `RAPIDOC_VERSION` | The rapidoc release in `assets/`; a test fails when the two disagree |
 | `testdata/conformance/` | The fixtures and README of `@rapidoc/embed`, copied in |
@@ -28,6 +28,7 @@ RapiDoc for Go: `rapidoc.Handler(options)` is a `net/http` handler that serves t
 - **No `\u` escape sequences in the sources.** Some editing tools turn them into the character itself; build them (`jsonEscape + "003c"`, `string(rune(0x2028))`) as `contract.go` does.
 - **The three asset files come from one rapidoc release**; `integration.json` carries the bundle's SRI hash, which is also the ETag.
 - **Everything not exported stays unexported** until someone needs it: an exported name cannot be taken back.
+- **One constructor.** `Handler` (and `Middleware`) panic on options that cannot be used; `Options.Validate` returns the error. Do not add a second constructor that differs only in how it fails.
 - **Requests are matched on `UIPath`; pages are written with `PublicUIPath`.** They differ only when a prefix is stripped before the handler.
 - **`gofmt` and `go vet` clean**; CI checks both.
 

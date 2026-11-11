@@ -47,7 +47,7 @@ rapidoc.Handler(rapidoc.Options{
 | `SpecURL` | | URL of your OpenAPI document, which the browser fetches when the page opens. Use it when the app already serves the document |
 | `Spec` | | The OpenAPI document itself: JSON as `[]byte`, `json.RawMessage` or `string`, or a value that `encoding/json` marshals to it. It is written into the page, so the browser makes no request for it. With both, `Spec` is shown and `SpecURL` is the download link. YAML is not read here; serve it and use `SpecURL` |
 | `Title` | `API Reference` | Page title |
-| `Assets` | `rapidoc.AssetsBundled` | `AssetsBundled`: the app serves `rapidoc-min.js`. `rapidoc.AssetsCDN`: the browser loads the same version from jsDelivr, checked against its SRI hash. `rapidoc.AssetsURL(url, integrity)`: a URL of your own |
+| `Assets` | `rapidoc.Bundled` | `Bundled`: the app serves `rapidoc-min.js`. `rapidoc.CDN`: the browser loads the same version from jsDelivr, checked against its SRI hash. `rapidoc.ScriptURL(url, integrity)`: a URL of your own |
 | `Attributes` | | [Attributes of `<rapi-doc>`](https://rapidocui.com/api/), in kebab-case or camelCase. They win over the package's own, and `nil` removes one |
 | `Head` | | HTML added to the end of `<head>`, as given |
 | `CSS` | | CSS added in a `<style>` element, as given |
@@ -57,7 +57,17 @@ rapidoc.Handler(rapidoc.Options{
 
 These are the options of every RapiDoc integration, in Go naming.
 
-`Handler` panics on options that cannot be used (an attribute name that is not valid, a `Spec` that is not JSON); `NewHandler` returns the error instead. `Middleware(options)` serves the reference and passes every other request to the next handler.
+`Handler` panics on options that cannot be used (an attribute name that is not valid, a `Spec` that is not JSON), as `http.ServeMux` does on a pattern it cannot use. When the options come from outside the program, such as a spec read from a file at startup, check them first:
+
+```go
+if err := options.Validate(); err != nil {
+	log.Printf("API docs disabled: %v", err)
+} else {
+	mux.Handle("/docs/", rapidoc.Handler(options))
+}
+```
+
+`Middleware(options)` serves the reference and passes every other request to the next handler.
 
 ## With a router or framework
 
@@ -101,9 +111,9 @@ router.Mount("/docs", rapidoc.Handler(rapidoc.Options{
 ## Notes
 
 - The handler answers `GET` and `HEAD` on the page, `{UIPath}/oauth-receiver.html`, `{UIPath}/rapidoc-min.js` and its license file. Any other path is a 404 (or goes to the next handler, with `Middleware`).
-- OAuth sign-in returns to `{UIPath}/oauth-receiver.html`, served on your own origin, also with `AssetsCDN`.
+- OAuth sign-in returns to `{UIPath}/oauth-receiver.html`, served on your own origin, also with `rapidoc.CDN`.
 - The bundle is sent with an `ETag`, and `rapidoc-min.js.LICENSE.txt` next to it lists the libraries inside it.
-- `rapidoc.Version()` is the RapiDoc release the package carries (the file `RAPIDOC_VERSION`).
+- `rapidoc.BundleVersion()` is the RapiDoc release the package carries (the file `RAPIDOC_VERSION`).
 - The page, its routes and its HTML follow the [RapiDoc integration contract](https://rapidocui.com/docs/get-started/build-an-integration/), which the integrations for JavaScript, Python and .NET also implement; `testdata/conformance` holds its fixtures.
 
 Go 1.22 or later. MIT.

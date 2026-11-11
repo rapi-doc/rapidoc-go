@@ -37,10 +37,11 @@ var bundle = func() manifest {
 	return parsed
 }()
 
-// Version is the version of rapidoc (the npm package) inside this package.
-func Version() string { return bundle.Version }
+// BundleVersion is the version of RapiDoc (the npm package rapidoc) that this package carries and serves.
+func BundleVersion() string { return bundle.Version }
 
-// Assets says where the browser loads the RapiDoc bundle from. The zero value is [AssetsBundled].
+// Assets says where the browser loads the RapiDoc bundle from: [Bundled] (the zero value), [CDN] or
+// [ScriptURL].
 type Assets struct {
 	kind      string
 	scriptURL string
@@ -48,14 +49,14 @@ type Assets struct {
 }
 
 var (
-	// AssetsBundled has the app serve rapidoc-min.js, which is inside this package. The default.
-	AssetsBundled = Assets{}
-	// AssetsCDN has the browser load the same version from jsDelivr, checked against its SRI hash.
-	AssetsCDN = Assets{kind: assetsCDN}
+	// Bundled has the app serve rapidoc-min.js, which is inside this package. The default.
+	Bundled = Assets{}
+	// CDN has the browser load the same version from jsDelivr, checked against its SRI hash.
+	CDN = Assets{kind: assetsCDN}
 )
 
-// AssetsURL is a script URL of your own, with an optional SRI hash.
-func AssetsURL(scriptURL, integrity string) Assets {
+// ScriptURL has the browser load the bundle from a URL of your own, with an optional SRI hash.
+func ScriptURL(scriptURL, integrity string) Assets {
 	return Assets{kind: assetsCustom, scriptURL: scriptURL, integrity: integrity}
 }
 
@@ -81,7 +82,7 @@ type Options struct {
 	// Title is the page title. Default "API Reference".
 	Title string
 
-	// Assets says where the browser loads the bundle from. Default AssetsBundled.
+	// Assets says where the browser loads the bundle from: Bundled (the default), CDN or ScriptURL(...).
 	Assets Assets
 
 	// Attributes are attributes of <rapi-doc> by name, in kebab-case or camelCase:
@@ -121,25 +122,29 @@ type handler struct {
 	next  http.Handler // answers requests for other paths; nil for 404
 }
 
-// NewHandler returns a handler that serves the reference at opts.UIPath, with the OAuth return page and,
-// unless the bundle comes from a CDN, rapidoc-min.js under it. It answers GET and HEAD; any other path is
-// a 404. The error reports options that cannot be used, such as an attribute name that is not valid.
-func NewHandler(opts Options) (http.Handler, error) {
-	return newHandler(opts, nil)
+// Validate reports options that cannot be used: an attribute name that is not valid, a Spec that is not
+// JSON, a ScriptURL without a URL. [Handler] and [Middleware] panic on such options, as http.ServeMux
+// does on a pattern it cannot use; call Validate first when the options come from outside the program,
+// such as a spec read from a file at startup.
+func (opts Options) Validate() error {
+	_, err := newHandler(opts, nil)
+	return err
 }
 
-// Handler is NewHandler for options known to be valid: it panics where NewHandler returns an error.
+// Handler returns a handler that serves the reference at opts.UIPath, with the OAuth return page and,
+// unless the bundle comes from a CDN, rapidoc-min.js under it. It answers GET and HEAD; any other path is
+// a 404. It panics on options that cannot be used; see [Options.Validate].
 func Handler(opts Options) http.Handler {
-	created, err := NewHandler(opts)
+	created, err := newHandler(opts, nil)
 	if err != nil {
 		panic(err)
 	}
 	return created
 }
 
-// Middleware serves the reference like Handler and passes every other request to the next handler, for
+// Middleware serves the reference like [Handler] and passes every other request to the next handler, for
 // routers that take middleware (chi's Use) and for a reference at the site root. It panics on options
-// that cannot be used.
+// that cannot be used; see [Options.Validate].
 func Middleware(opts Options) func(http.Handler) http.Handler {
 	if _, err := newHandler(opts, nil); err != nil {
 		panic(err)

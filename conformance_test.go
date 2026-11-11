@@ -223,8 +223,11 @@ func TestTheBundleIsTheReleaseNamedInRapidocVersion(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if want := strings.TrimSpace(string(pinned)); Version() != want {
-		t.Errorf("assets hold rapidoc %s, RAPIDOC_VERSION says %s; run scripts/sync.sh", Version(), want)
+	if want := strings.TrimSpace(string(pinned)); BundleVersion() != want {
+		t.Errorf("assets hold rapidoc %s, RAPIDOC_VERSION says %s; run scripts/sync.sh", BundleVersion(), want)
+	}
+	if contractVersion != 2 {
+		t.Errorf("contract version %d; the fixtures in testdata are for version 2", contractVersion)
 	}
 	if bundle.Files[scriptFile].Integrity == "" || bundle.CDN == "" {
 		t.Error("integration.json has no SRI hash or CDN URL for the bundle")

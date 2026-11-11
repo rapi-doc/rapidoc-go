@@ -187,13 +187,13 @@ func TestWritesTheSpecIntoThePage(t *testing.T) {
 			t.Errorf("%s: a spec-url nobody set", name)
 		}
 	}
-	if _, err := NewHandler(Options{Spec: "openapi: 3.1.0"}); err == nil {
+	if err := (Options{Spec: "openapi: 3.1.0"}).Validate(); err == nil {
 		t.Error("YAML as the spec should be refused")
 	}
 }
 
 func TestLoadsTheBundleFromACDNOrAURLOfYourOwn(t *testing.T) {
-	get := serve(t, Handler(Options{Assets: AssetsCDN}))
+	get := serve(t, Handler(Options{Assets: CDN}))
 	_, html := get("GET", "/docs")
 	pinned := regexp.MustCompile(`<script type="module" src="https://cdn\.jsdelivr\.net/npm/rapidoc@[0-9.]+/dist/rapidoc-min\.js" integrity="sha384-[^"]+" crossorigin="anonymous"></script>`)
 	if !pinned.MatchString(html) {
@@ -204,9 +204,9 @@ func TestLoadsTheBundleFromACDNOrAURLOfYourOwn(t *testing.T) {
 	_, receiver := get("GET", "/docs/oauth-receiver.html")
 	contains(t, receiver, "cdn.jsdelivr.net")
 
-	_, html = serve(t, Handler(Options{Assets: AssetsURL("/static/rapidoc.js", "sha384-abc")}))("GET", "/docs")
+	_, html = serve(t, Handler(Options{Assets: ScriptURL("/static/rapidoc.js", "sha384-abc")}))("GET", "/docs")
 	contains(t, html, `src="/static/rapidoc.js" integrity="sha384-abc" crossorigin="anonymous"`)
-	if _, err := NewHandler(Options{Assets: AssetsURL("", "")}); err == nil {
+	if err := (Options{Assets: ScriptURL("", "")}).Validate(); err == nil {
 		t.Error("an empty script URL should be refused")
 	}
 }
@@ -238,12 +238,15 @@ func TestMiddlewarePassesOtherRequestsOn(t *testing.T) {
 }
 
 func TestRefusesOptionsThatCannotBeUsed(t *testing.T) {
-	if _, err := NewHandler(Options{Attributes: map[string]any{"on click": "x"}}); err == nil {
+	if err := (Options{Attributes: map[string]any{"on click": "x"}}).Validate(); err == nil {
 		t.Error("an invalid attribute name should be refused")
+	}
+	if err := (Options{SpecURL: "/openapi.json", Assets: CDN}).Validate(); err != nil {
+		t.Errorf("valid options refused: %v", err)
 	}
 	defer func() {
 		if recover() == nil {
-			t.Error("Handler should panic where NewHandler returns an error")
+			t.Error("Handler should panic where Validate returns an error")
 		}
 	}()
 	Handler(Options{Spec: "{"})

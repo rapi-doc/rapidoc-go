@@ -17,8 +17,8 @@ import (
 	"strings"
 )
 
-// ContractVersion is the version of the integration contract this package implements.
-const ContractVersion = 2
+// contractVersion is the version of the RapiDoc integration contract this file implements.
+const contractVersion = 2
 
 const (
 	defaultUIPath     = "/docs"
