@@ -148,9 +148,13 @@ router.Mount("/docs", rapidoc.Handler(rapidoc.Options{
 
 Go 1.22 or later. MIT.
 
+## Upgrading to v0.3.1
+
+v0.3.1 ships rapidoc 14. Nothing changes in `Attributes` or in what the page shows: rapidoc 14 has no attribute changes ([v13 to v14](https://rapidocui.com/docs/migration/v13-to-v14/)).
+
 ## Upgrading to v0.3.0
 
-v0.3.0 ships rapidoc 13, which changed one set of attributes: `filter-operations` replaces `match-paths`, `match-type` and `remove-endpoints-with-badge-label-as`, and rapidoc 13 ignores those three. If your `Attributes` set any of them, set `filter-operations` instead. Matching is exact, so a v12 `match-paths` prefix becomes a glob: `Attributes: map[string]any{"filter-operations": "/pets/**"}`. The [v12 to v13 migration guide](https://rapidocui.com/migration/v12-to-v13/) has the other terms (`tag:`, `badge:`, `deprecated`, `!` to leave out).
+v0.3.0 ships rapidoc 13, which changed one set of attributes: `filter-operations` replaces `match-paths`, `match-type` and `remove-endpoints-with-badge-label-as`, and rapidoc 13 ignores those three. If your `Attributes` set any of them, set `filter-operations` instead. Matching is exact, so a v12 `match-paths` prefix becomes a glob: `Attributes: map[string]any{"filter-operations": "/pets/**"}`. The [v12 to v13 migration guide](https://rapidocui.com/docs/migration/v12-to-v13/) has the other terms (`tag:`, `badge:`, `deprecated`, `!` to leave out).
 
 ## Releasing (for maintainers)
 
