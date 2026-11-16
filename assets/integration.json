@@ -1,25 +1,25 @@
 {
   "contract": 1,
   "name": "rapidoc",
-  "version": "12.2.1",
+  "version": "13.1.0",
   "elements": [
     "rapi-doc",
     "rapi-doc-mini",
     "oauth-receiver"
   ],
-  "cdn": "https://cdn.jsdelivr.net/npm/rapidoc@12.2.1/dist/",
+  "cdn": "https://cdn.jsdelivr.net/npm/rapidoc@13.1.0/dist/",
   "files": {
     "rapidoc-min.js": {
       "role": "script",
       "contentType": "text/javascript; charset=utf-8",
-      "bytes": 643134,
-      "integrity": "sha384-fDL68sPBr9TyucAsgfEt3RC8GRwnn2/BBD6yMhTlMXjrpYwO1izQ4eYuYxtx3hkN"
+      "bytes": 665005,
+      "integrity": "sha384-ixOm+7pTWMldqRQMEkP6B2mPimX5ojssLizZ0sMCS8sYYkqOJxucszzE1W+JRzM0"
     },
     "rapidoc-min.js.LICENSE.txt": {
       "role": "license",
       "contentType": "text/plain; charset=utf-8",
       "bytes": 19073,
-      "integrity": "sha384-yJi7Sdq1zZ4poh3CEcMLVui9lWzMqSXRuy9ZoJkF6x+Y8tkMZQNz7KGC+1OWNziX"
+      "integrity": "sha384-jMehfwEYA3fcnl0eKSF0Jrxrlx74/yU2pExzHMZw+qMHZmCdd7f0KPIo8JSligyc"
     },
     "oauth-receiver.html": {
       "role": "oauth-receiver",
@@ -30,14 +30,14 @@
     "rapidoc-flow-min.js": {
       "role": "flow-script",
       "contentType": "text/javascript; charset=utf-8",
-      "bytes": 213829,
-      "integrity": "sha384-LPIOQCz5cmcr/crNRO+r8GAkACSZq+kDFt39+PVYMeB803+CFUiq0V7FETy8M6qB"
+      "bytes": 279661,
+      "integrity": "sha384-BZrXXV7qJv4warGk7BxN4OHUbJ9PAA0T8NC3Myi+nGoice2T5oXLO4ymP7VArnmU"
     },
     "rapidoc-flow-min.js.LICENSE.txt": {
       "role": "flow-license",
       "contentType": "text/plain; charset=utf-8",
       "bytes": 8286,
-      "integrity": "sha384-cPZoQqVV7R6RJUj/xHLmY3mc1AZlX3sZMSY9cPAEZXtaG5jkWVYISUYu7RItmJtR"
+      "integrity": "sha384-7STmyBtShzb2NXgZtvMnE6WXHjhtLvmiY+UXlm8Y3luFx+lZgghdrHSr26EN4ulx"
     }
   }
 }
