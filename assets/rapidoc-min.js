@@ -1,6 +1,6 @@
 /*!
  * @license
- * rapidoc v14.0.0
+ * rapidoc v14.1.0
  * (c) 2026 Mrinmoy Majumdar <mrin9@yahoo.com>
  * SPDX-License-Identifier: MIT
  * Bundled third-party code and its licenses: rapidoc-min.js.LICENSE.txt
@@ -134,6 +134,24 @@ Please report this to https://github.com/markedjs/marked.`,e){let a="<p>An error
       --primary-foreground: #ffffff;
       --background: #ffffff;
       --foreground: #1e1b3a;
+    `},amber:{dark:`
+      --primary: #f6a821;
+      --primary-foreground: #000000;
+      --background: #30333c;
+      --foreground: #dfe2e7;
+      --card: #383b43;
+      --border: #3f424b;
+      --sidebar: #2c2d35;
+      --heading-color: #ffffff;
+    `,light:`
+      --primary: #ff791a;
+      --primary-foreground: #000000;
+      --background: #ffffff;
+      --foreground: #2a2d35;
+      --card: color-mix(in srgb, var(--background) 94%, var(--foreground));
+      --border: color-mix(in srgb, var(--background) 85%, var(--foreground));
+      --sidebar: var(--background);
+      --heading-color: var(--foreground);
     `}},qi=Object.keys(_i),Cp=4.5,Tp=.12,Ii={dark:{background:"#1f1f23",foreground:"#d4d4d8",card:.08},light:{background:"#ffffff",foreground:"#27272a",card:.06}};function Ne(e){let t=/^#([0-9a-f]{3}|[0-9a-f]{6})([0-9a-f]{2})?$/i.exec(String(e||"").trim());if(!t)return null;let r=t[1].length===3?[...t[1]].map(a=>a+a).join(""):t[1];return[0,2,4].map(a=>parseInt(r.slice(a,a+2),16))}var dn=e=>`#${e.map(t=>Math.round(t).toString(16).padStart(2,"0")).join("")}`,pn=(e,t,r)=>e.map((a,n)=>a+(t[n]-a)*r);function Li(e){let[t,r,a]=e.map(n=>{let s=n/255;return s<=.03928?s/12.92:((s+.055)/1.055)**2.4});return .2126*t+.7152*r+.0722*a}function Op(e,t){let[r,a]=[Ne(e),Ne(t)];if(!r||!a)return 1;let[n,s]=[Li(r),Li(a)].sort((i,o)=>o-i);return(n+.05)/(s+.05)}function un(e,t,r={}){let a=Ne(e);if(!a)return e;let n=Ii[t]||Ii.dark,s=Ne(r.background)||Ne(n.background),i=Ne(r.foreground)||Ne(n.foreground),o=[s,Ne(r.card)||pn(s,i,n.card),pn(s,a,Tp)].map(dn),l=t==="light"?[0,0,0]:[255,255,255];for(let c=0;c<=50;c++){let d=dn(pn(a,l,c/50));if(o.every(p=>Op(d,p)>=Cp))return d}return dn(l)}var Ur=(e,t)=>RegExp(`--${t}:\\s*([^;]+);`).exec(e)?.[1].trim();function Ni(e,t){return`${e}  --primary-text-${t}: ${un(Ur(e,"primary"),t,{background:Ur(e,"background"),foreground:Ur(e,"foreground"),card:Ur(e,"card")})};
     `}function Fp(e,{dark:t,light:r}){let a=n=>{let s=n?`[color-scheme='${n}']`:"",i=[`:host([theme='${e}']${s})`];return e==="ember"&&i.push(`:host(:not([theme])${s})`),i.join(`,
   `)};return`

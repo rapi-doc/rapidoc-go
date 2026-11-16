@@ -148,6 +148,10 @@ router.Mount("/docs", rapidoc.Handler(rapidoc.Options{
 
 Go 1.22 or later. MIT.
 
+## Upgrading to v0.3.2
+
+v0.3.2 ships rapidoc 14.1.0, which adds the `amber` theme (`Attributes: map[string]any{"theme": "amber"}`). Nothing else changes in `Attributes` or in what the page shows.
+
 ## Upgrading to v0.3.1
 
 v0.3.1 ships rapidoc 14. Nothing changes in `Attributes` or in what the page shows: rapidoc 14 has no attribute changes ([v13 to v14](https://rapidocui.com/docs/migration/v13-to-v14/)).

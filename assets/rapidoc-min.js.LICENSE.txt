@@ -1,4 +1,4 @@
-Third-party software bundled in rapidoc-min.js (rapidoc 14.0.0)
+Third-party software bundled in rapidoc-min.js (rapidoc 14.1.0)
 ===============================================================
 
 rapidoc-min.js contains code from the packages below. Their licenses require their
